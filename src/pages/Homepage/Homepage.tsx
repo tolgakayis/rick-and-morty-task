@@ -1,59 +1,56 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Card, Col, Row } from "react-bootstrap";
-import { getCharacters } from "../../store/homepage/homepageSlice";
-import { AppDispatch } from "../../store/configureStore";
-import PaginationComp from "../../components/Pagination/PaginationComp";
-import { Paginate } from "../../models/Paginate";
-import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
+import { useState } from "react";
+import Characters from "../../components/Characters/Characters";
+import { Col, Nav, Row } from "react-bootstrap";
+
 type Props = {};
 
 const Homepage = (props: Props) => {
-	const dispatch = useDispatch<AppDispatch>();
-	const [pageIndex, setPageIndex] = useState(1);
-	const characters: Paginate<GetCharacterResponseModel> = useSelector(
-		(state: any) => state.homepage.characters
-	);
-
-	useEffect(() => {
-		dispatch(getCharacters(pageIndex));
-	}, [pageIndex]);
-
-	const handlePageChange = (pageNumber: number) => {
-		setPageIndex(pageNumber);
-		// Implement your logic to fetch data for the new page number (e.g., dispatch an action)
-		console.log("Page changed to:", pageNumber);
+	const [activeTab, setActiveTab] = useState<string>("characters");
+	const handleTabClick = (selectedKey: string | null) => {
+		if (selectedKey) {
+			setActiveTab(selectedKey);
+		}
 	};
 	return (
 		<div>
-			<h1 className="mt-3 text-center">Characters</h1>
-			{characters.results ? (
-				<Row xs={1} sm={2} md={4} lg={5} className="g-3 p-4">
-					{characters.results.map((character) => (
-						<Col key={character.id} className="d-flex justify-content-center">
-							<Card
-								className="mb-3 text-center"
-								style={{ minWidth: 100, maxWidth: 300 }}
-							>
-								<Card.Img variant="top" src={character.image} />
-								<Card.Body>
-									<Card.Title>{character.name}</Card.Title>
-									<Card.Text>{character.species}</Card.Text>
-									<Card.Link href="#">View Details</Card.Link>
-								</Card.Body>
-							</Card>
-						</Col>
-					))}
+			<Row className="tbt-tabs">
+				<Row>
+					<Col xs={12}>
+						<Nav
+							variant="tabs"
+							activeKey={activeTab}
+							onSelect={handleTabClick}
+							className="custom-tab-list"
+						>
+							<Nav.Item>
+								<Nav.Link eventKey="characters" className="">
+									Characters
+								</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey="episodes" className="">
+									Episodes
+								</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey="locations" className="">
+									Locations
+								</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey="favorites" className="">
+									Favorites
+								</Nav.Link>
+							</Nav.Item>
+						</Nav>
+					</Col>
 				</Row>
-			) : (
-				<p>Error</p>
-			)}
-			<div className="d-flex justify-content-center">
-				<PaginationComp
-					currentPage={pageIndex}
-					onPageChange={handlePageChange}
-					totalPage={characters.info?.pages}
-				/>
+			</Row>
+			<div className="custom-tab-content">
+				{activeTab === "characters" && <Characters />}
+				{activeTab === "episodes" && <></>}
+				{activeTab === "locations" && <Characters />}
+				{activeTab === "favorites" && <Characters />}
 			</div>
 		</div>
 	);

@@ -12,7 +12,7 @@ export const OverlayLoader = (props: Props) => {
 				<div className="overlay">
 					<div className="overlay__inner">
 						<div className="overlay__content">
-							<img className="spinner" />
+							<img className="spinner" src="/assets/images/loadingIcon.png" />
 						</div>
 					</div>
 				</div>
