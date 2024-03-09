@@ -1,4 +1,4 @@
-import { Pagination } from "react-bootstrap";
+import { Col, Pagination, Row } from "react-bootstrap";
 
 type Props = {
 	currentPage: number;
@@ -22,7 +22,7 @@ function PaginationComp(props: Props) {
 		);
 	}
 
-	return <Pagination>{items}</Pagination>;
+	return <Pagination className="">{items}</Pagination>;
 }
 
 export default PaginationComp;

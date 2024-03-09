@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../store/configureStore";
-import { Paginate } from "../../models/Paginate";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Paginate } from "../../models/Paginate";
 import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
+import { AppDispatch } from "../../store/configureStore";
 import { getCharacters } from "../../store/homepage/homepageSlice";
 import PaginationComp from "../Pagination/PaginationComp";
-import { Link } from "react-router-dom";
-import "./Characters.css";
 
 type Props = {};
 
-const Characters = (props: Props) => {
+const Favorites = (props: Props) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const [pageIndex, setPageIndex] = useState(1);
 	const characters: Paginate<GetCharacterResponseModel> = useSelector(
@@ -24,11 +22,12 @@ const Characters = (props: Props) => {
 
 	const handlePageChange = (pageNumber: number) => {
 		setPageIndex(pageNumber);
+		// Implement your logic to fetch data for the new page number (e.g., dispatch an action)
 		console.log("Page changed to:", pageNumber);
 	};
 	return (
 		<div>
-			<h1 className="mt-3 text-center">Characters</h1>
+			<h1 className="mt-3 text-center">Favorites</h1>
 			{characters.results ? (
 				<Row xs={1} sm={2} md={4} lg={5} className="g-3 p-4">
 					{characters.results.map((character) => (
@@ -41,7 +40,7 @@ const Characters = (props: Props) => {
 								<Card.Body>
 									<Card.Title>{character.name}</Card.Title>
 									<Card.Text>{character.species}</Card.Text>
-									<Link to={`/characters/${character.id}`}>View Details</Link>
+									<Card.Link href="#">View Details</Card.Link>
 								</Card.Body>
 							</Card>
 						</Col>
@@ -61,4 +60,4 @@ const Characters = (props: Props) => {
 	);
 };
 
-export default Characters;
+export default Favorites;

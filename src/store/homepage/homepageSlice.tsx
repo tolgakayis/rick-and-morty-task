@@ -12,6 +12,7 @@ export interface HomepageModel {
 	locations: Paginate<GetLocationResponseModel>;
 	episodes: Paginate<GetEpisodeResponseModel>;
 	favorites: Paginate<GetCharacterResponseModel>;
+	character: GetCharacterResponseModel[];
 }
 
 const initialState: HomepageModel = {
@@ -19,6 +20,7 @@ const initialState: HomepageModel = {
 	locations: {} as Paginate<GetLocationResponseModel>,
 	episodes: {} as Paginate<GetEpisodeResponseModel>,
 	favorites: {} as Paginate<GetCharacterResponseModel>,
+	character: {} as GetCharacterResponseModel[],
 };
 
 export const getCharacters = createAsyncThunk(
@@ -26,6 +28,14 @@ export const getCharacters = createAsyncThunk(
 	async function GetCharacters(pageIndex: number) {
 		const characters = (await CharacterService.getAll(pageIndex)).data;
 		return characters;
+	}
+);
+
+export const getCharacter = createAsyncThunk(
+	"homepage/getCharacter",
+	async function GetCharacter(id: number[]) {
+		const character = (await CharacterService.getById(id)).data;
+		return character;
 	}
 );
 
@@ -61,6 +71,10 @@ const homepageSlice = createSlice({
 		builder.addCase(getLocations.fulfilled, (state, action) => {
 			state.locations = action.payload;
 			localStorage.setItem("locations", JSON.stringify(action.payload));
+		});
+		builder.addCase(getCharacter.fulfilled, (state, action) => {
+			state.character = action.payload;
+			localStorage.setItem("character", JSON.stringify(action.payload));
 		});
 	},
 });

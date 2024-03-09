@@ -1,6 +1,10 @@
 import { useState } from "react";
 import Characters from "../../components/Characters/Characters";
 import { Col, Nav, Row } from "react-bootstrap";
+import Episodes from "../../components/Episodes/Episodes";
+import Locations from "../../components/Locations/Locations";
+import Favorites from "../../components/Favorites/Favorites";
+import "./Homepage.css";
 
 type Props = {};
 
@@ -48,9 +52,9 @@ const Homepage = (props: Props) => {
 			</Row>
 			<div className="custom-tab-content">
 				{activeTab === "characters" && <Characters />}
-				{activeTab === "episodes" && <></>}
-				{activeTab === "locations" && <Characters />}
-				{activeTab === "favorites" && <Characters />}
+				{activeTab === "episodes" && <Episodes />}
+				{activeTab === "locations" && <Locations />}
+				{activeTab === "favorites" && <Favorites />}
 			</div>
 		</div>
 	);

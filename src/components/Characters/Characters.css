@@ -1,0 +1,7 @@
+div.card-body {
+	background: linear-gradient(to bottom, #44c59aab, #c95e5e8b)
+}
+
+div.card-title {
+	font-weight: bolder;
+}
