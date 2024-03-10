@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/configureStore";
 import { Paginate } from "../../models/Paginate";
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card, Button } from "react-bootstrap";
 import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
-import { getCharacters } from "../../store/homepage/homepageSlice";
+import {
+	addFavorite,
+	getCharacters,
+	removeFavorite,
+} from "../../store/homepage/homepageSlice";
 import PaginationComp from "../Pagination/PaginationComp";
 import { Link } from "react-router-dom";
 import "./Characters.css";
@@ -17,10 +21,37 @@ const Characters = (props: Props) => {
 	const characters: Paginate<GetCharacterResponseModel> = useSelector(
 		(state: any) => state.homepage.characters
 	);
+	const favorites: GetCharacterResponseModel[] = useSelector(
+		(state: any) => state.homepage.favorites
+	);
 
 	useEffect(() => {
 		dispatch(getCharacters(pageIndex));
 	}, [pageIndex]);
+
+	const handleFavorite = (
+		character: GetCharacterResponseModel,
+		characterName: string
+	) => {
+		const isFavorite = favorites.some((fav) => fav.id === character.id); // Check if character is already a favorite
+		if (isFavorite) {
+			if (
+				window.confirm(
+					`Are you sure you want to remove ${characterName} from favorites?`
+				)
+			) {
+				dispatch(removeFavorite(character.id)); // Remove if already favorite
+			}
+		} else {
+			if (favorites.length < 10) {
+				dispatch(addFavorite(character)); // Add if not favorite and limit not reached
+			} else {
+				alert(
+					"Favorite character limit reached!(10) Remove a character first."
+				);
+			}
+		}
+	};
 
 	const handlePageChange = (pageNumber: number) => {
 		setPageIndex(pageNumber);
@@ -41,6 +72,15 @@ const Characters = (props: Props) => {
 								<Card.Body>
 									<Card.Title>{character.name}</Card.Title>
 									<Card.Text>{character.species}</Card.Text>
+									<Button
+										className="btn btn-primary mb-2"
+										onClick={() => handleFavorite(character, character.name)}
+									>
+										{favorites.find((fav) => fav.id === character.id)
+											? "Remove Favorite"
+											: "Add Favorite"}
+									</Button>
+									<br />
 									<Link to={`/characters/${character.id}`}>View Details</Link>
 								</Card.Body>
 							</Card>

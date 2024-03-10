@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Paginate } from "../../models/Paginate";
 import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
 import { GetEpisodeResponseModel } from "../../models/Responses/Episode/GetEpisodeResponseModel";
@@ -11,7 +11,7 @@ export interface HomepageModel {
 	characters: Paginate<GetCharacterResponseModel>;
 	locations: Paginate<GetLocationResponseModel>;
 	episodes: Paginate<GetEpisodeResponseModel>;
-	favorites: Paginate<GetCharacterResponseModel>;
+	favorites: GetCharacterResponseModel[];
 	character: GetCharacterResponseModel[];
 	location: GetLocationResponseModel[];
 	episode: GetEpisodeResponseModel[];
@@ -21,7 +21,7 @@ const initialState: HomepageModel = {
 	characters: {} as Paginate<GetCharacterResponseModel>,
 	locations: {} as Paginate<GetLocationResponseModel>,
 	episodes: {} as Paginate<GetEpisodeResponseModel>,
-	favorites: {} as Paginate<GetCharacterResponseModel>,
+	favorites: JSON.parse(localStorage.getItem("favorites") || "[]"),
 	character: {} as GetCharacterResponseModel[],
 	location: {} as GetLocationResponseModel[],
 	episode: {} as GetEpisodeResponseModel[],
@@ -75,6 +75,12 @@ export const getEpisode = createAsyncThunk(
 	}
 );
 
+export const addFavorite = createAction<GetCharacterResponseModel>(
+	"homepage/addFavorite"
+);
+
+export const removeFavorite = createAction<number>("homepage/removeFavorite");
+
 const homepageSlice = createSlice({
 	name: "homepage",
 	initialState,
@@ -103,6 +109,24 @@ const homepageSlice = createSlice({
 		builder.addCase(getEpisode.fulfilled, (state, action) => {
 			state.episode = action.payload;
 			localStorage.setItem("episode", JSON.stringify(action.payload));
+		});
+		builder.addCase(addFavorite, (state, action) => {
+			const existingFavorite = state.favorites.find(
+				(fav) => fav.id === action.payload.id
+			);
+			if (!existingFavorite) {
+				state.favorites.push(action.payload);
+				localStorage.setItem("favorites", JSON.stringify(state.favorites));
+			}
+		});
+		builder.addCase(removeFavorite, (state, action) => {
+			const favoriteIndex = state.favorites.findIndex(
+				(fav) => fav.id === action.payload
+			);
+			if (favoriteIndex !== -1) {
+				state.favorites.splice(favoriteIndex, 1);
+				localStorage.setItem("favorites", JSON.stringify(state.favorites));
+			}
 		});
 	},
 });
