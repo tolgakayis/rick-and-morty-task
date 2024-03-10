@@ -3,11 +3,15 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
 import { AppDispatch } from "../../store/configureStore";
 import { getCharacter } from "../../store/homepage/homepageSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./CharacterDetail.css";
-import { Image } from "react-bootstrap";
 
 type Props = {};
+
+interface Episode {
+	url: string;
+	name: string;
+}
 
 const CharacterDetail = (props: Props) => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -15,8 +19,41 @@ const CharacterDetail = (props: Props) => {
 		(state: any) => state.homepage.character
 	);
 	const location = useLocation();
-	const idListString = location.pathname.split("/").slice(2).join(","); // Assuming IDs after "/characters/"
+	const idListString = location.pathname.split("/").slice(2).join(",");
 	const ids: number[] = idListString.split(",").map(Number);
+
+	const [episodeId, setEpisodeId] = useState<number | null>(null);
+	const [episodes, setEpisodes] = useState<Episode[]>([]);
+
+	const fetchEpisodes = async (episodeUrls: string[]) => {
+		try {
+			const episodePromises = episodeUrls.map(async (url) => {
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error(`Failed to fetch episode: ${url}`);
+				}
+				const data = await response.json();
+				return data;
+			});
+			const episodeData = await Promise.all(episodePromises);
+			setEpisodes(episodeData);
+		} catch (error) {
+			console.error("Error fetching episodes:", error);
+		}
+	};
+
+	useEffect(() => {
+		if (character.episode) {
+			fetchEpisodes(character.episode);
+		}
+	}, [character.episode]);
+
+	const handleEpisodeClick = (episodeUrl: string) => {
+		const potentialId = episodeUrl?.split("/")?.pop();
+		if (potentialId) {
+			setEpisodeId(parseInt(potentialId));
+		}
+	};
 
 	useEffect(() => {
 		if (ids && ids.length > 0) {
@@ -24,6 +61,7 @@ const CharacterDetail = (props: Props) => {
 		}
 	}, []);
 
+	const locationId = character.location?.url?.split("/").pop();
 	return (
 		<div className="character-detail">
 			<img
@@ -42,24 +80,31 @@ const CharacterDetail = (props: Props) => {
 				<p>
 					<b>Status:</b> {character.status}
 				</p>
-				{character.type && ( // Conditionally render type if present
+				{character.type && (
 					<p>
 						<b>Type:</b> {character.type}
 					</p>
 				)}
 				<p>
-					<b>Location:</b>{" "}
+					<b>Location:</b>
 					{character.location?.url ? (
-						<Link to={character.location?.url}>{character.location?.name}</Link>
+						<Link to={`/locations/${locationId}`}>
+							{character.location?.name}
+						</Link>
 					) : (
 						<span>Unknown</span>
 					)}
 				</p>
 				<ul className="episodes">
 					<h3>Episodes</h3>
-					{character.episode?.map((episode) => (
-						<li key={episode}>
-							<Link to={episode}>{episode}</Link>
+					{episodes.map((episode) => (
+						<li key={episode.url}>
+							<Link
+								to={`/episodes/${episode.url.split("/")?.pop()}`}
+								onClick={() => handleEpisodeClick(episode.url)}
+							>
+								{episode.name}
+							</Link>
 						</li>
 					))}
 				</ul>

@@ -7,6 +7,7 @@ import { Paginate } from "../../models/Paginate";
 import { AppDispatch } from "../../store/configureStore";
 import PaginationComp from "../Pagination/PaginationComp";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -40,9 +41,9 @@ const Episodes = (props: Props) => {
 								<Card.Body>
 									<Card.Title>{episode.name}</Card.Title>
 									<Card.Text>
-										{format(new Date(episode.created), "MMMM d, yyyy")}
+										{format(new Date(episode.air_date), "MMMM d, yyyy")}
 									</Card.Text>
-									<Card.Link href="#">View Details</Card.Link>
+									<Link to={`/episodes/${episode.id}`}>View Details</Link>
 								</Card.Body>
 							</Card>
 						</Col>

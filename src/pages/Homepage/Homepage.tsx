@@ -27,24 +27,16 @@ const Homepage = (props: Props) => {
 							className="custom-tab-list"
 						>
 							<Nav.Item>
-								<Nav.Link eventKey="characters" className="">
-									Characters
-								</Nav.Link>
+								<Nav.Link eventKey="characters">Characters</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link eventKey="episodes" className="">
-									Episodes
-								</Nav.Link>
+								<Nav.Link eventKey="episodes">Episodes</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link eventKey="locations" className="">
-									Locations
-								</Nav.Link>
+								<Nav.Link eventKey="locations">Locations</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link eventKey="favorites" className="">
-									Favorites
-								</Nav.Link>
+								<Nav.Link eventKey="favorites">Favorites</Nav.Link>
 							</Nav.Item>
 						</Nav>
 					</Col>

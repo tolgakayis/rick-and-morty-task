@@ -1,3 +1,17 @@
 a.nav-link {
+	padding-left: 2rem;
+	padding-right: 2rem;
+	font-size: 1.3rem;
+}
+
+a.nav-link {
+	font-weight: bold;
 	color: rgb(0, 0, 0);
+}
+
+nav {
+	color: rgb(0, 0, 0);
+	background: rgba(117, 245, 162, 0.713);
+	font-weight: bolder;
+	font-size: 1.3rem;
 }

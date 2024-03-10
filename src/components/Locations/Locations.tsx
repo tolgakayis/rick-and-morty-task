@@ -6,6 +6,7 @@ import { Paginate } from "../../models/Paginate";
 import { AppDispatch } from "../../store/configureStore";
 import { Card, Col, Row } from "react-bootstrap";
 import PaginationComp from "../Pagination/PaginationComp";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -40,7 +41,7 @@ const Locations = (props: Props) => {
 									<Card.Title>{location.name}</Card.Title>
 									<Card.Text>{location.type}</Card.Text>
 									<Card.Text>{location.dimension}</Card.Text>
-									<Card.Link href="#">View Details</Card.Link>
+									<Link to={`/locations/${location.id}`}>View Details</Link>
 								</Card.Body>
 							</Card>
 						</Col>
