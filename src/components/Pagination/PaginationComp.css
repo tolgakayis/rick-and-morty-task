@@ -1,0 +1,11 @@
+/* Styles for all devices */
+.pagination {
+	display: flex;
+	padding: 0;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.pagination li {
+	margin: 5px;
+}

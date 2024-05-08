@@ -27,7 +27,14 @@ const Favorites = (props: Props) => {
 		<div>
 			<h1 className="mt-3 text-center">Favorite Characters</h1>
 			{favorites.length > 0 ? (
-				<Row xs={1} sm={2} md={4} lg={5} className="g-3 p-4">
+				<Row
+					xs={1}
+					sm={2}
+					md={4}
+					lg={5}
+					className="g-3 p-4"
+					style={{ marginLeft: 0, marginRight: 0 }}
+				>
 					{favorites.map((character) => (
 						<Col key={character.id} className="d-flex justify-content-center">
 							<Card

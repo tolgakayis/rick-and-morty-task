@@ -31,7 +31,14 @@ const Episodes = (props: Props) => {
 		<div>
 			<h1 className="mt-3 text-center">Episodes</h1>
 			{episodes.results ? (
-				<Row xs={1} sm={2} md={4} lg={5} className="g-3 p-4">
+				<Row
+					xs={1}
+					sm={2}
+					md={4}
+					lg={5}
+					className="g-3 p-4"
+					style={{ marginLeft: 0, marginRight: 0 }}
+				>
 					{episodes.results.map((episode) => (
 						<Col key={episode.id} className="d-flex justify-content-center">
 							<Card

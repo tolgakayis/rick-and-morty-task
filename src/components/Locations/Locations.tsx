@@ -30,7 +30,14 @@ const Locations = (props: Props) => {
 		<div>
 			<h1 className="mt-3 text-center">Locations</h1>
 			{locations.results ? (
-				<Row xs={1} sm={2} md={4} lg={5} className="g-3 p-4">
+				<Row
+					xs={1}
+					sm={2}
+					md={4}
+					lg={5}
+					className="g-3 p-4"
+					style={{ marginLeft: 0, marginRight: 0 }}
+				>
 					{locations.results.map((location) => (
 						<Col key={location.id} className="d-flex justify-content-center">
 							<Card

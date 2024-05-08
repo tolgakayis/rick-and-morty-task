@@ -1,4 +1,5 @@
-import { Col, Pagination, Row } from "react-bootstrap";
+import { Pagination } from "react-bootstrap";
+import "./PaginationComp.css";
 
 type Props = {
 	currentPage: number;

@@ -17,31 +17,25 @@ const Homepage = (props: Props) => {
 	};
 	return (
 		<div>
-			<Row className="tbt-tabs">
-				<Row>
-					<Col xs={12}>
-						<Nav
-							variant="tabs"
-							activeKey={activeTab}
-							onSelect={handleTabClick}
-							className="custom-tab-list"
-						>
-							<Nav.Item>
-								<Nav.Link eventKey="characters">Characters</Nav.Link>
-							</Nav.Item>
-							<Nav.Item>
-								<Nav.Link eventKey="episodes">Episodes</Nav.Link>
-							</Nav.Item>
-							<Nav.Item>
-								<Nav.Link eventKey="locations">Locations</Nav.Link>
-							</Nav.Item>
-							<Nav.Item>
-								<Nav.Link eventKey="favorites">Favorites</Nav.Link>
-							</Nav.Item>
-						</Nav>
-					</Col>
-				</Row>
-			</Row>
+			<Nav
+				variant="tabs"
+				activeKey={activeTab}
+				onSelect={handleTabClick}
+				className="custom-tab-list"
+			>
+				<Nav.Item>
+					<Nav.Link eventKey="characters">Characters</Nav.Link>
+				</Nav.Item>
+				<Nav.Item>
+					<Nav.Link eventKey="episodes">Episodes</Nav.Link>
+				</Nav.Item>
+				<Nav.Item>
+					<Nav.Link eventKey="locations">Locations</Nav.Link>
+				</Nav.Item>
+				<Nav.Item>
+					<Nav.Link eventKey="favorites">Favorites</Nav.Link>
+				</Nav.Item>
+			</Nav>
 			<div className="custom-tab-content">
 				{activeTab === "characters" && <Characters />}
 				{activeTab === "episodes" && <Episodes />}
