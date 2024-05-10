@@ -2,10 +2,6 @@ import "./CustomNavbar.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Select, { MultiValue } from "react-select";
-import { useState, useEffect } from "react";
-import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
-import makeAnimated from "react-select/animated";
 import SelectComponent from "../SelectComponent/SelectComponent";
 
 type Props = {};

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import Select, { MultiValue } from "react-select";
-import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
 import makeAnimated from "react-select/animated";
+import AsyncSelect from "react-select/async";
 
 type Option = {
 	value: number;
@@ -11,96 +12,85 @@ type Option = {
 };
 
 const SelectComponent: React.FC = () => {
-	const [characters, setCharacters] = useState<GetCharacterResponseModel[]>([]);
+	const [characters, setCharacters] = useState<Option[]>([]);
 	const [selectedCharacters, setSelectedCharacters] = useState<Option[]>([]);
+	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		const fetchCharacters = async () => {
-			let allCharacters:
-				| any[]
-				| ((
-						prevState: GetCharacterResponseModel[]
-				  ) => GetCharacterResponseModel[]) = [];
-			let page = 1;
-
-			// Loop to fetch characters from all pages
-			while (true) {
-				const url = `https://rickandmortyapi.com/api/character?page=${page}`;
-				const response = await fetch(url);
-				const data = await response.json();
-
-				allCharacters = allCharacters.concat(data.results); // Add characters to array
-
-				if (!data.info.next) {
-					break; // Stop if there are no more pages
-				}
-
-				page++;
-			}
-
-			setCharacters(allCharacters);
-		};
-
-		fetchCharacters();
-	}, []);
-
-	const handleSelectChange = (newValue: MultiValue<Option>) => {
-		setSelectedCharacters([...newValue]);
+	const fetchCharacters = async (inputValue: string) => {
+		setLoading(true);
+		try {
+			const response = await axios.get(
+				`https://rickandmortyapi.com/api/character/?name=${inputValue}`
+			);
+			setLoading(false);
+			return response.data.results.map((char: any) => ({
+				value: char.id,
+				label: char.name,
+				episodes: char.episode.length,
+				image: char.image,
+			}));
+		} catch (error) {
+			console.error("Fetching characters failed:", error);
+			setLoading(false);
+			return [];
+		}
 	};
 
-	const characterOptions: Option[] = characters.map((character) => ({
-		value: character.id,
-		label: character.name,
-		episodes: character.episode.length,
-		image: character.image,
-	}));
+	const handleSelectChange = (newValue: MultiValue<Option>) => {
+		setSelectedCharacters(newValue as Option[]);
+	};
 
 	const customStyles = {
-		control: (provided: any) => ({
-			...provided,
-			minWidth: "500px",
+		control: (base: any) => ({
+			...base,
+			minWidth: 500,
 		}),
 	};
 
 	const animatedComponents = makeAnimated();
-
+	const formatOptionLabel = (
+		character: Option,
+		{ inputValue }: { inputValue: string }
+	) => {
+		const regex = new RegExp(inputValue, "gi");
+		const labelWithHighlight = character.label.replace(
+			regex,
+			`<strong>${inputValue}</strong>`
+		);
+		return (
+			<div>
+				<img
+					src={character.image}
+					alt={character.label}
+					style={{ width: 50, marginRight: 10 }}
+				/>
+				<span
+					style={{ fontWeight: 600 }}
+					dangerouslySetInnerHTML={{ __html: labelWithHighlight }}
+				></span>
+				<span style={{ marginLeft: 10, fontWeight: 500, fontSize: 16 }}>
+					{character.episodes} Episodes
+				</span>
+			</div>
+		);
+	};
 	return (
 		<div>
-			<Select
+			<AsyncSelect
+				isLoading={loading}
+				loadOptions={fetchCharacters}
+				cacheOptions
+				defaultOptions
 				styles={customStyles}
 				isMulti
 				closeMenuOnSelect={false}
 				value={selectedCharacters}
 				onChange={handleSelectChange}
-				options={characterOptions}
+				options={characters}
 				components={animatedComponents}
-				formatOptionLabel={(characters) => (
-					<div className="characters">
-						<img
-							src={characters.image}
-							style={{
-								height: "50px",
-								width: "50px",
-								borderRadius: "20%",
-								marginRight: "10px",
-							}}
-						/>
-						<span style={{ fontSize: 16, fontWeight: 700 }}>
-							{characters.label}
-						</span>
-						<span
-							className="span"
-							style={{
-								fontSize: 16,
-								fontWeight: 500,
-								marginLeft: 10,
-								marginTop: 20,
-							}}
-						>
-							{characters.episodes} Episodes
-						</span>
-					</div>
-				)}
+				formatOptionLabel={formatOptionLabel}
+				getOptionLabel={(option: Option) => option.label}
+				getOptionValue={(option: Option) => option.value.toString()}
 			/>
 		</div>
 	);
