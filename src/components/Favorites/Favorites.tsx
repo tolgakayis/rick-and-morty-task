@@ -46,8 +46,7 @@ const Favorites = (props: Props) => {
 									<Card.Title>{character.name}</Card.Title>
 									<Card.Text>{character.species}</Card.Text>
 									<Button
-										variant="primary"
-										className="mb-2"
+										className="btn btn-primary mb-2"
 										onClick={() =>
 											handleRemoveFavorite(character.id, character.name)
 										}

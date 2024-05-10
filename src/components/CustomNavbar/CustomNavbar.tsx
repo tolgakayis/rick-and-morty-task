@@ -1,9 +1,12 @@
 import "./CustomNavbar.css";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Select, { MultiValue } from "react-select";
+import { useState, useEffect } from "react";
+import { GetCharacterResponseModel } from "../../models/Responses/Character/GetCharacterResponseModel";
+import makeAnimated from "react-select/animated";
+import SelectComponent from "../SelectComponent/SelectComponent";
 
 type Props = {};
 
@@ -21,15 +24,7 @@ const CustomNavbar = (props: Props) => {
 					>
 						<Nav.Link href="/">Homepage</Nav.Link>
 					</Nav>
-					<Form className="d-flex">
-						<Form.Control
-							type="search"
-							placeholder="Search"
-							className="me-2"
-							aria-label="Search"
-						/>
-						<Button variant="outline-success">Search</Button>
-					</Form>
+					<SelectComponent />
 				</Navbar.Collapse>
 			</Container>
 		</Navbar>

@@ -16,7 +16,7 @@ export class BaseService<
 		this.apiUrl = "";
 	}
 
-	getAll(pageIndex: number): Promise<AxiosResponse<GetAllType, any>> {
+	getAllByPage(pageIndex: number): Promise<AxiosResponse<GetAllType, any>> {
 		return axiosInstance.get<GetAllType>(this.apiUrl + "/?page=" + pageIndex);
 	}
 

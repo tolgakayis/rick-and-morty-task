@@ -30,7 +30,7 @@ const initialState: HomepageModel = {
 export const getCharacters = createAsyncThunk(
 	"homepage/getCharacters",
 	async function GetCharacters(pageIndex: number) {
-		const characters = (await CharacterService.getAll(pageIndex)).data;
+		const characters = (await CharacterService.getAllByPage(pageIndex)).data;
 		return characters;
 	}
 );
@@ -46,7 +46,7 @@ export const getCharacter = createAsyncThunk(
 export const getLocations = createAsyncThunk(
 	"homepage/getLocations",
 	async function GetLocations(pageIndex: number) {
-		const locations = (await LocationService.getAll(pageIndex)).data;
+		const locations = (await LocationService.getAllByPage(pageIndex)).data;
 		return locations;
 	}
 );
@@ -62,7 +62,7 @@ export const getLocation = createAsyncThunk(
 export const getEpisodes = createAsyncThunk(
 	"homepage/getEpisodes",
 	async function GetEpisodes(pageIndex: number) {
-		const episodes = (await EpisodeService.getAll(pageIndex)).data;
+		const episodes = (await EpisodeService.getAllByPage(pageIndex)).data;
 		return episodes;
 	}
 );
