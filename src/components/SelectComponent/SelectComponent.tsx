@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import Select, { MultiValue } from "react-select";
+import React, { useState } from "react";
+import { MultiValue } from "react-select";
 import makeAnimated from "react-select/animated";
 import AsyncSelect from "react-select/async";
 
@@ -12,7 +12,6 @@ type Option = {
 };
 
 const SelectComponent: React.FC = () => {
-	const [characters, setCharacters] = useState<Option[]>([]);
 	const [selectedCharacters, setSelectedCharacters] = useState<Option[]>([]);
 	const [loading, setLoading] = useState(false);
 
@@ -47,14 +46,16 @@ const SelectComponent: React.FC = () => {
 	};
 
 	const animatedComponents = makeAnimated();
+
 	const formatOptionLabel = (
 		character: Option,
 		{ inputValue }: { inputValue: string }
 	) => {
-		const regex = new RegExp(inputValue, "gi");
+		const searchTerm = inputValue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+		const regex = new RegExp(searchTerm, "gi");
 		const labelWithHighlight = character.label.replace(
 			regex,
-			`<strong>${inputValue}</strong>`
+			(match) => `<strong>${match}</strong>`
 		);
 		return (
 			<div>
@@ -73,9 +74,11 @@ const SelectComponent: React.FC = () => {
 			</div>
 		);
 	};
+
 	return (
 		<div>
 			<AsyncSelect
+				hideSelectedOptions={false}
 				isLoading={loading}
 				loadingMessage={() => {
 					return "Searching..";
@@ -85,17 +88,13 @@ const SelectComponent: React.FC = () => {
 					return `No characters found matching "${inputValue}"`;
 				}}
 				cacheOptions
-				defaultOptions
 				styles={customStyles}
 				isMulti
 				closeMenuOnSelect={false}
 				value={selectedCharacters}
 				onChange={handleSelectChange}
-				options={characters}
 				components={animatedComponents}
 				formatOptionLabel={formatOptionLabel}
-				getOptionLabel={(option: Option) => option.label}
-				getOptionValue={(option: Option) => option.value.toString()}
 			/>
 		</div>
 	);
