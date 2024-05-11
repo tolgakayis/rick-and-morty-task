@@ -33,18 +33,18 @@ const Characters = (props: Props) => {
 		character: GetCharacterResponseModel,
 		characterName: string
 	) => {
-		const isFavorite = favorites.some((fav) => fav.id === character.id); // Check if character is already a favorite
+		const isFavorite = favorites.some((fav) => fav.id === character.id);
 		if (isFavorite) {
 			if (
 				window.confirm(
 					`Are you sure you want to remove ${characterName} from favorites?`
 				)
 			) {
-				dispatch(removeFavorite(character.id)); // Remove if already favorite
+				dispatch(removeFavorite(character.id));
 			}
 		} else {
 			if (favorites.length < 10) {
-				dispatch(addFavorite(character)); // Add if not favorite and limit not reached
+				dispatch(addFavorite(character));
 			} else {
 				alert(
 					"Favorite character limit reached!(10) Remove a character first."

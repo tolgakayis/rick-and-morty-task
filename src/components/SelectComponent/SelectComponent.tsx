@@ -30,7 +30,6 @@ const SelectComponent: React.FC = () => {
 				image: char.image,
 			}));
 		} catch (error) {
-			console.error("Fetching characters failed:", error);
 			setLoading(false);
 			return [];
 		}
@@ -78,7 +77,13 @@ const SelectComponent: React.FC = () => {
 		<div>
 			<AsyncSelect
 				isLoading={loading}
+				loadingMessage={() => {
+					return "Searching..";
+				}}
 				loadOptions={fetchCharacters}
+				noOptionsMessage={({ inputValue }) => {
+					return `No characters found matching "${inputValue}"`;
+				}}
 				cacheOptions
 				defaultOptions
 				styles={customStyles}

@@ -15,9 +15,6 @@ class CharacterService extends BaseService<
 		super();
 		this.apiUrl = "character";
 	}
-	//getAll(pageIndex: number): Promise<AxiosResponse<GetAllType, any>> {
-	//	return axiosInstance.get<GetAllType>(this.apiUrl + "/?page=" + pageIndex);
-	//}
 }
 
 export default new CharacterService();
