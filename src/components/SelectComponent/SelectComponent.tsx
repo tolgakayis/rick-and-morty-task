@@ -83,6 +83,7 @@ const SelectComponent: React.FC = () => {
 				classNamePrefix="select"
 				closeMenuOnSelect={false}
 				isLoading={loading}
+				hideSelectedOptions={false}
 				loadingMessage={() => {
 					return "Searching..";
 				}}
