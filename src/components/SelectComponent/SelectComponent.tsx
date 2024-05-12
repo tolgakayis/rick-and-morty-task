@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { MultiValue } from "react-select";
 import makeAnimated from "react-select/animated";
 import AsyncSelect from "react-select/async";
+import "./SelectComponent.css";
 
 type Option = {
 	value: number;
@@ -38,19 +39,13 @@ const SelectComponent: React.FC = () => {
 		setSelectedCharacters(newValue as Option[]);
 	};
 
-	const customStyles = {
-		control: (base: any) => ({
-			...base,
-			minWidth: 500,
-		}),
-	};
-
 	const animatedComponents = makeAnimated();
 
 	const formatOptionLabel = (
 		character: Option,
-		{ inputValue }: { inputValue: string }
+		{ context, inputValue }: { context: string; inputValue: string }
 	) => {
+		const isSelected = context === "value";
 		const searchTerm = inputValue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 		const regex = new RegExp(searchTerm, "gi");
 		const labelWithHighlight = character.label.replace(
@@ -58,19 +53,25 @@ const SelectComponent: React.FC = () => {
 			(match) => `<strong>${match}</strong>`
 		);
 		return (
-			<div>
-				<img
-					src={character.image}
-					alt={character.label}
-					style={{ width: 50, marginRight: 10 }}
-				/>
-				<span
-					style={{ fontWeight: 600 }}
-					dangerouslySetInnerHTML={{ __html: labelWithHighlight }}
-				></span>
-				<span style={{ marginLeft: 10, fontWeight: 500, fontSize: 16 }}>
-					{character.episodes} Episodes
-				</span>
+			<div className="character-option-container">
+				{!isSelected && (
+					<img
+						className="character-option-image"
+						src={character.image}
+						alt={character.label}
+					/>
+				)}
+				<div className="character-option-info">
+					<span
+						style={{ fontWeight: 500 }}
+						dangerouslySetInnerHTML={{ __html: labelWithHighlight }}
+					></span>
+					{!isSelected && (
+						<span style={{ fontWeight: 500, fontSize: 16 }}>
+							{character.episodes} Episodes
+						</span>
+					)}
+				</div>
 			</div>
 		);
 	};
@@ -78,7 +79,9 @@ const SelectComponent: React.FC = () => {
 	return (
 		<div>
 			<AsyncSelect
-				hideSelectedOptions={false}
+				className="select-component"
+				classNamePrefix="select"
+				closeMenuOnSelect={false}
 				isLoading={loading}
 				loadingMessage={() => {
 					return "Searching..";
@@ -88,13 +91,12 @@ const SelectComponent: React.FC = () => {
 					return `No characters found matching "${inputValue}"`;
 				}}
 				cacheOptions
-				styles={customStyles}
-				isMulti
-				closeMenuOnSelect={false}
+				isMulti={true}
 				value={selectedCharacters}
 				onChange={handleSelectChange}
 				components={animatedComponents}
 				formatOptionLabel={formatOptionLabel}
+				placeholder="Search..."
 			/>
 		</div>
 	);

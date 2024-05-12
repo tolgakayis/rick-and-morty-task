@@ -1,0 +1,36 @@
+.character-option-image {
+	width: 50px;
+	margin-right: 10px;
+	border-radius: 20%;
+}
+
+.character-option-info {
+	display: flex;
+	flex-direction: column;
+	/* Stack name and episode count */
+}
+
+.character-option-container {
+	display: flex;
+	align-items: center;
+	/* Pink background */
+	/* Add some padding */
+	padding: 2px;
+}
+
+.select__option--is-selected {
+	background-color: rgba(117, 245, 162, 0.713) !important;
+	/* Use transparent background */
+	color: inherit !important;
+	/* Ensure text color is not overridden */
+}
+
+.select-component {
+	min-width: 500px;
+}
+
+@media (max-width: 768px) {
+	.select-component {
+		min-width: 100%;
+	}
+}
