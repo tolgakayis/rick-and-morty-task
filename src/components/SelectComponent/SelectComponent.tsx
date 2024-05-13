@@ -30,6 +30,7 @@ const SelectComponent: React.FC = () => {
 				image: char.image,
 			}));
 		} catch (error) {
+			console.error("Error fetching characters:", error);
 			setLoading(false);
 			return [];
 		}
@@ -89,7 +90,11 @@ const SelectComponent: React.FC = () => {
 				}}
 				loadOptions={fetchCharacters}
 				noOptionsMessage={({ inputValue }) => {
-					return `No characters found matching "${inputValue}"`;
+					if (inputValue == "") {
+						return "Type to search for characters";
+					} else {
+						return `No characters found matching "${inputValue}"`;
+					}
 				}}
 				cacheOptions
 				isMulti={true}
